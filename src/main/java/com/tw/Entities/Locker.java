@@ -16,6 +16,11 @@ public class Locker {
         this.capacity = capacity;
     }
 
+    public Locker(Integer id, Integer capacity) {
+        this.id = id;
+        this.capacity = capacity;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
