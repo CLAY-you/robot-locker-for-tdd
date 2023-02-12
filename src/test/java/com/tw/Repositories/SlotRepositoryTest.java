@@ -85,4 +85,11 @@ public class SlotRepositoryTest {
         long size = slotRepository.countByHasBagFalseAndLockerId(99999);
         assertThat(size).isEqualTo(0);
     }
+
+    @Test
+    void should_return_available_slots_when_available_slots_in_locker_exist() {
+        List<Slot> availableSlots = slotRepository.findByHasBagAndLockerId(false, firstLocker.getId());
+
+        assertThat(availableSlots.size()).isEqualTo(1);
+    }
 }

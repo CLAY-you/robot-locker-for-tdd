@@ -5,9 +5,10 @@ import com.tw.Entities.Slot;
 import com.tw.LockerStatus;
 import com.tw.Repositories.LockerRepository;
 import com.tw.Repositories.SlotRepository;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class LockerService {
@@ -28,7 +29,6 @@ public class LockerService {
 
     public String getAvailableSlot() {
         Locker locker = lockerRepository.findAll().get(0);
-
         List<Slot> availableSlots = slotRepository.findByHasBagAndLockerId(false, locker.getId());
         Slot availableSlot = availableSlots.get(0);
         String ticketNumber = availableSlot.dispatchTicketNumber();
