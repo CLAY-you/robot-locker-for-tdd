@@ -52,10 +52,21 @@ public class LockerControllerTest extends BaseControllerTest{
 
     @Test
     void should_return_500_given_locker_service_is_not_available() throws Exception {
-        LockerStatus lockerStatus = new LockerStatus(Boolean.FALSE);
         when(lockerService.getLockerStatus()).thenThrow(new RuntimeException());
         this.mockMvc.perform(get("/locker"))
                 .andExpect(status().isInternalServerError())
                 .andExpect(status().reason("Internal Server Error"));
     }
+    //TODO: locker 中存在可使用的slot的时候，返回8位随机数字返回 作为ticket number
+
+    @Test
+    void should_return_ticket_number_when_get_available_slot() throws Exception {
+        String ticketNo = "12345678";
+        when(lockerService.getAvailableSlot()).thenReturn(ticketNo);
+        this.mockMvc.perform(get("/slot")).andDo(print()).andExpect(status().isOk())
+                .andExpect(jsonPath("$").value(ticketNo));
+    }
+
+    //TODO: locker 中不存在可使用的slot的时候，返回提示信息 "储物柜已满，请稍后再试"
+
 }

@@ -24,4 +24,9 @@ public class LockerController {
             throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "Internal Server Error");
         }
     }
+
+    @GetMapping("/slot")
+    public String getAvailableSlot() {
+        return lockerService.getAvailableSlot();
+    }
 }
