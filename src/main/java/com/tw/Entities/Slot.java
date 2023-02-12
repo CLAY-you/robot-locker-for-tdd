@@ -60,6 +60,10 @@ public class Slot {
     }
 
     public String dispatchTicketNumber() {
+        return generateTicketNumber();
+    }
+
+    public String generateTicketNumber() {
         return null;
     }
 }
