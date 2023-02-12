@@ -18,6 +18,12 @@ public class Slot {
         this.hasBag = hasBag;
     }
 
+    public Slot(Integer id, Integer lockerId, Boolean hasBag) {
+        this.id = id;
+        this.lockerId = lockerId;
+        this.hasBag = hasBag;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
@@ -51,5 +57,9 @@ public class Slot {
 
     public Integer getLockerId() {
         return lockerId;
+    }
+
+    public String dispatchTicketNumber() {
+        return null;
     }
 }

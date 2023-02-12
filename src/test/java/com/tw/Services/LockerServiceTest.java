@@ -1,6 +1,7 @@
 package com.tw.Services;
 
 import com.tw.Entities.Locker;
+import com.tw.Entities.Slot;
 import com.tw.LockerStatus;
 import com.tw.Repositories.LockerRepository;
 import com.tw.Repositories.SlotRepository;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -77,5 +79,19 @@ public class LockerServiceTest {
 
         LockerStatus lockerStatus = lockerService.getLockerStatus();
         assertThat(lockerStatus.isHasAvailableSlot()).isEqualTo(false);
+    }
+
+    //TODO: locker 中存在可使用的slot的时候，匹配到可使用的slot，返回8位随机数字返回 作为ticket number
+    @Test
+    void should_find_available_slot_and_return_8_bit_random_number_as_ticket_number() {
+        List<Slot> availableSlots = new ArrayList<>(List.of(new Slot(1, 1, false)));
+        List<Slot> spyAvailableSlots = spy(availableSlots);
+        when(slotRepository.findByHasBagAndLockerId(any(Boolean.class), any(Integer.class))).thenReturn(spyAvailableSlots);
+        Slot spyAvailableSlot = spy(availableSlots.get(0));
+        when(spyAvailableSlots.get(0)).thenReturn(spyAvailableSlot);
+        when(spyAvailableSlot.dispatchTicketNumber()).thenReturn("12345678");
+
+        String ticketNo = lockerService.getAvailableSlot();
+        assertThat(ticketNo).isEqualTo("12345678");
     }
 }
