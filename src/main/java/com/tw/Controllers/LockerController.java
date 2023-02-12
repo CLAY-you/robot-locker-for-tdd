@@ -27,6 +27,6 @@ public class LockerController {
 
     @GetMapping("/slot")
     public String getAvailableSlot() {
-        return lockerService.getAvailableSlot();
+        return lockerService.getTicketNoBindWithDispatchedSlot();
     }
 }

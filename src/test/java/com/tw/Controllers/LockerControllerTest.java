@@ -62,7 +62,7 @@ public class LockerControllerTest extends BaseControllerTest{
     @Test
     void should_return_ticket_number_when_get_available_slot() throws Exception {
         String ticketNo = "12345678";
-        when(lockerService.getAvailableSlot()).thenReturn(ticketNo);
+        when(lockerService.getTicketNoBindWithDispatchedSlot()).thenReturn(ticketNo);
         this.mockMvc.perform(get("/slot")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(ticketNo));
     }

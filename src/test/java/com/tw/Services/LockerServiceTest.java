@@ -91,7 +91,7 @@ public class LockerServiceTest {
         when(spyAvailableSlots.get(0)).thenReturn(spyAvailableSlot);
         when(spyAvailableSlot.dispatchTicketNumber()).thenReturn("12345678");
 
-        String ticketNo = lockerService.getAvailableSlot();
+        String ticketNo = lockerService.getTicketNoBindWithDispatchedSlot();
         assertThat(ticketNo).isEqualTo("12345678");
     }
 }

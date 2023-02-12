@@ -27,7 +27,7 @@ public class LockerService {
         return new LockerStatus(size > 0);
     }
 
-    public String getAvailableSlot() {
+    public String getTicketNoBindWithDispatchedSlot() {
         Locker locker = lockerRepository.findAll().get(0);
         List<Slot> availableSlots = slotRepository.findByHasBagAndLockerId(false, locker.getId());
         Slot availableSlot = availableSlots.get(0);
