@@ -21,7 +21,7 @@ class SlotTest {
     }
 
     @Test
-    void should_generate_8_bit_ticket_number() {
+    void should_generate_8_digit_ticket_number() {
         MockedStatic<RandomNumberGenerator> randomNoGenerator = mockStatic(RandomNumberGenerator.class);
         randomNoGenerator.when(RandomNumberGenerator::generate8BitRandomNumber).thenReturn("12345678");
 
