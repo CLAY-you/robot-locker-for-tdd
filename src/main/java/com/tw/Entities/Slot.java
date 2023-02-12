@@ -44,44 +44,20 @@ public class Slot {
     @Column(name = "ticket_no")
     private String ticketNo;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setLockerId(Integer lockerId) {
-        this.lockerId = lockerId;
-    }
-
-    public void setHasBag(Boolean hasBag) {
-        this.hasBag = hasBag;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public Boolean getHasBag() {
-        return hasBag;
-    }
-
-    public Integer getLockerId() {
-        return lockerId;
-    }
-
     public String dispatchTicketNumber() {
         String generateTicketNo = generateTicketNumber();
         setTicketNo(generateTicketNo);
         return getTicketNo();
     }
 
-    private void setTicketNo(String ticketNo) {
-        this.ticketNo = ticketNo;
-    }
 
     public String generateTicketNumber() {
         return RandomNumberGenerator.generate8BitRandomNumber();
     }
 
+    private void setTicketNo(String ticketNo) {
+        this.ticketNo = ticketNo;
+    }
     public String getTicketNo() {
         return ticketNo;
     }
