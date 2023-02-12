@@ -31,7 +31,6 @@ public class LockerService {
         Locker locker = lockerRepository.findAll().get(0);
         List<Slot> availableSlots = slotRepository.findByHasBagAndLockerId(false, locker.getId());
         Slot availableSlot = availableSlots.get(0);
-        String ticketNumber = availableSlot.dispatchTicketNumber();
-        return ticketNumber;
+        return availableSlot.dispatchTicketNumber();
     }
 }
