@@ -64,6 +64,6 @@ public class Slot {
     }
 
     public String generateTicketNumber() {
-        return null;
+        return RandomNumberGenerator.generate8BitRandomNumber();
     }
 }
