@@ -27,7 +27,24 @@ class SlotTest {
 
         Slot availableSlot = new Slot(1, 1, false);
         String generatedTicketNumber = availableSlot.generateTicketNumber();
+        randomNoGenerator.close();
 
         assertThat(generatedTicketNumber).isEqualTo("12345678");
+    }
+
+    //TODO: bind generated ticket number with dispatched slot
+
+    @Test
+    void should_bind_generated_ticket_number_with_dispatched_slot() {
+        MockedStatic<RandomNumberGenerator> randomNoGenerator = mockStatic(RandomNumberGenerator.class);
+        String expectedTicketNumber = "12345678";
+        randomNoGenerator.when(RandomNumberGenerator::generate8BitRandomNumber).thenReturn(expectedTicketNumber);
+
+        Slot availableSlot = new Slot(1, 1, false, expectedTicketNumber);
+        String generatedTicketNumber = availableSlot.generateTicketNumber();
+        randomNoGenerator.close();
+
+        assertThat(generatedTicketNumber).isEqualTo(expectedTicketNumber);
+        assertThat(availableSlot.getTicketNo()).isEqualTo(expectedTicketNumber);
     }
 }

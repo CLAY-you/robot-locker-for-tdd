@@ -9,7 +9,6 @@ import javax.persistence.JoinColumn;
 
 @Entity
 public class Slot {
-
     public Slot() {
     }
 
@@ -24,16 +23,26 @@ public class Slot {
         this.hasBag = hasBag;
     }
 
+    public Slot(Integer id, Integer lockerId, Boolean hasBag, String ticketNo) {
+        this.id = id;
+        this.lockerId = lockerId;
+        this.hasBag = hasBag;
+        this.ticketNo = ticketNo;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private Integer id;
 
-    @JoinColumn(name="locker_id")
+    @JoinColumn(name = "locker_id")
     private Integer lockerId;
 
     @Column(name = "has_bag")
     private Boolean hasBag;
+
+    private String ticketNo;
+
 
     public void setId(Integer id) {
         this.id = id;
@@ -60,10 +69,20 @@ public class Slot {
     }
 
     public String dispatchTicketNumber() {
-        return generateTicketNumber();
+        String generateTicketNo = generateTicketNumber();
+        setTicketNo(generateTicketNo);
+        return getTicketNo();
+    }
+
+    private void setTicketNo(String ticketNo) {
+        this.ticketNo = ticketNo;
     }
 
     public String generateTicketNumber() {
         return RandomNumberGenerator.generate8BitRandomNumber();
+    }
+
+    public String getTicketNo() {
+        return ticketNo;
     }
 }
