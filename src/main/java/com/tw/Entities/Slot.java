@@ -41,8 +41,8 @@ public class Slot {
     @Column(name = "has_bag")
     private Boolean hasBag;
 
+    @Column(name = "ticket_no")
     private String ticketNo;
-
 
     public void setId(Integer id) {
         this.id = id;
