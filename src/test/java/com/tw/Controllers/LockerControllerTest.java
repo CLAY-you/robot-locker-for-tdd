@@ -69,4 +69,11 @@ public class LockerControllerTest extends BaseControllerTest{
 
     //TODO: locker 中不存在可使用的slot的时候，返回提示信息 "储物柜已满，请稍后再试"
 
+    @Test
+    void should_return_warning_message_no_available_slot_when_not_find_available_slot() throws Exception {
+        String warningMessage = "no available slot can be dispatched, try it later";
+        when(lockerService.getTicketNoBindWithDispatchedSlot()).thenReturn(warningMessage);
+        this.mockMvc.perform(get("/slot")).andDo(print()).andExpect(status().isOk())
+                .andExpect(jsonPath("$").value(warningMessage));
+    }
 }
