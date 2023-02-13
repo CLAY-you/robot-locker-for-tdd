@@ -39,6 +39,9 @@ public class LockerServiceTest {
     @Captor
     private ArgumentCaptor<Integer> integerArgumentCaptor;
 
+    @Captor
+    private ArgumentCaptor<Boolean> booleanArgumentCaptor;
+
     List<Locker> lockers = new ArrayList<>(List.of(new Locker(1, 2)));
     Locker locker = lockers.get(0);
 
@@ -87,11 +90,19 @@ public class LockerServiceTest {
         List<Slot> availableSlots = new ArrayList<>(List.of(new Slot(1, 1, false)));
         List<Slot> spyAvailableSlots = spy(availableSlots);
         when(slotRepository.findByHasBagAndLockerId(any(Boolean.class), any(Integer.class))).thenReturn(spyAvailableSlots);
+
         Slot spyAvailableSlot = spy(availableSlots.get(0));
         when(spyAvailableSlots.get(0)).thenReturn(spyAvailableSlot);
         when(spyAvailableSlot.dispatchTicketNumber()).thenReturn("12345678");
 
         String ticketNo = lockerService.getTicketNoBindWithDispatchedSlot();
+
+        verify(slotRepository, times(1))
+                .findByHasBagAndLockerId(booleanArgumentCaptor.capture(), integerArgumentCaptor.capture());
+        Boolean hasBag = booleanArgumentCaptor.getValue();
+        Integer lockerId = integerArgumentCaptor.getValue();
         assertThat(ticketNo).isEqualTo("12345678");
+        assertThat(hasBag).isEqualTo(spyAvailableSlot.getHasBag());
+        assertThat(lockerId).isEqualTo(locker.getId());
     }
 }

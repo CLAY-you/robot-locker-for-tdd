@@ -61,4 +61,8 @@ public class Slot {
     public String getTicketNo() {
         return ticketNo;
     }
+
+    public boolean getHasBag() {
+        return hasBag;
+    }
 }
