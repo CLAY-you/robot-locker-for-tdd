@@ -117,4 +117,11 @@ public class LockerServiceTest {
 
         assertThat(warningMessage).isEqualTo("no available slot can be dispatched, try it later");
     }
+
+    //TODO: locker中存在可使用的slot的时候，遇到internal error，返回对应的提示信息
+
+    @Test
+    void should_return_internal_error_message_when_it_occurred_given_there_is_available_slots() {
+
+    }
 }

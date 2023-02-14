@@ -85,7 +85,7 @@ public class LockerControllerTest extends BaseControllerTest {
 
     @Test
     void should_return_warning_message_no_available_slot_when_not_internal_server_error_occurred() throws Exception {
-        String warningMessage = "internal server error, try it later";
+        String warningMessage = "Internal Server Error";
         doThrow(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, warningMessage))
                 .when(lockerService).getTicketNoBindWithDispatchedSlot();
         this.mockMvc.perform(get("/slot")).andDo(print())
