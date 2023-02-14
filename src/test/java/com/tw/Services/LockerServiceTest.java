@@ -105,4 +105,16 @@ public class LockerServiceTest {
         assertThat(hasBag).isEqualTo(spyAvailableSlot.getHasBag());
         assertThat(lockerId).isEqualTo(locker.getId());
     }
+
+    //TODO: locker中不存在可以使用的slot的时候，返回提示对应的提示信息
+    @Test
+    void should_return_warning_message_to_alert_user_there_is_no_available_slot() {
+        List<Slot> availableSlots = new ArrayList<>(List.of());
+        List<Slot> spyAvailableSlots = spy(availableSlots);
+        when(slotRepository.findByHasBagAndLockerId(any(Boolean.class), any(Integer.class))).thenReturn(spyAvailableSlots);
+
+        String warningMessage = lockerService.getTicketNoBindWithDispatchedSlot();
+
+        assertThat(warningMessage).isEqualTo("no available slot can be dispatched, try it later");
+    }
 }
