@@ -4,14 +4,18 @@ import com.tw.LockerStatus;
 import com.tw.Services.LockerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class LockerControllerTest extends BaseControllerTest{
+public class LockerControllerTest extends BaseControllerTest {
 
     @MockBean
     LockerService lockerService;
@@ -21,7 +25,7 @@ public class LockerControllerTest extends BaseControllerTest{
      **Given** lockerController收到请求，并通过lockerService获取locker的status
      **When** 向 /locker发送get请求
      **Then** get /locker response返回Object LockerStatus {hasAvailableSlot: true}
-    */
+     */
     @Test
     void should_return_hasAvailableSlot_as_true_given_locker_has_available_slot() throws Exception {
         LockerStatus lockerStatus = new LockerStatus(Boolean.TRUE);
@@ -75,5 +79,18 @@ public class LockerControllerTest extends BaseControllerTest{
         when(lockerService.getTicketNoBindWithDispatchedSlot()).thenReturn(warningMessage);
         this.mockMvc.perform(get("/slot")).andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(warningMessage));
+    }
+
+    //TODO: locker 中有可用的箱位，系统报错时候，提示 "存包异常， 请稍后再试"
+
+    @Test
+    void should_return_warning_message_no_available_slot_when_not_internal_server_error_occurred() throws Exception {
+        String warningMessage = "internal server error, try it later";
+        doThrow(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, warningMessage))
+                .when(lockerService).getTicketNoBindWithDispatchedSlot();
+        this.mockMvc.perform(get("/slot")).andDo(print())
+                .andExpect(status().isInternalServerError())
+                .andExpect(status().reason(warningMessage))
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException));
     }
 }

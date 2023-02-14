@@ -19,14 +19,17 @@ public class LockerController {
     public LockerStatus locker() {
         try {
             return lockerService.getLockerStatus();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "Internal Server Error");
         }
     }
 
     @GetMapping("/slot")
     public String getAvailableSlot() {
-        return lockerService.getTicketNoBindWithDispatchedSlot();
+        try {
+            return lockerService.getTicketNoBindWithDispatchedSlot();
+        } catch (Exception e) {
+            throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "Internal Server Error");
+        }
     }
 }
