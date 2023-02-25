@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.BOOLEAN;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -46,5 +47,17 @@ class SlotTest {
 
         assertThat(generatedTicketNumber).isEqualTo(expectedTicketNumber);
         assertThat(availableSlot.getTicketNo()).isEqualTo(expectedTicketNumber);
+    }
+
+    //TODO: should release resource when slot occupied need to be
+
+    @Test
+    void should_release_slot_resource_when_it_required() {
+        Slot slotInUse = new Slot(123, 1, Boolean.TRUE, "12345678");
+        Slot slotReleased = new Slot(123, 1, Boolean.FALSE, null);
+
+        slotInUse.releaseSlotResource();
+
+        assertThat(slotInUse).usingRecursiveComparison().isEqualTo(slotReleased);
     }
 }
