@@ -73,6 +73,10 @@ public class Slot {
         return hasBag;
     }
 
+    public void setHasBag(Boolean hasBag) {
+        this.hasBag = hasBag;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -89,12 +93,9 @@ public class Slot {
         return lockerId;
     }
 
-    public void updateOccupiedStatus() {
-        this.hasBag = Boolean.FALSE;
-    }
-
     public Integer releaseSlotResource() {
         setTicketNo(null);
+        setHasBag(Boolean.FALSE);
         return getId();
     }
 }

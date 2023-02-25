@@ -8,10 +8,7 @@ import com.tw.Repositories.SlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.Provider;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -43,8 +40,9 @@ public class LockerService {
         Locker locker = lockerRepository.findAll().get(0);
         Optional<Slot> slotOptional = slotRepository.findByHasBagAndTicketNoAndLockerId(Boolean.TRUE, ticketNo, locker.getId());
         if (slotOptional.isPresent()) {
-            slotOptional.get().updateOccupiedStatus();
-            return slotOptional.get();
+            Slot slot = slotOptional.get();
+            slot.releaseSlotResource();
+            return slot;
         }
         return null;
     }
