@@ -46,6 +46,6 @@ public class LockerService {
             slotOptional.get().updateOccupiedStatus();
             return slotOptional.get();
         }
-        return new Slot();
+        return null;
     }
 }

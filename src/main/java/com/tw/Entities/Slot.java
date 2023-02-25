@@ -22,6 +22,7 @@ public class Slot {
 
     @Column(name = "ticket_no")
     private String ticketNo;
+
     public Slot() {
     }
 
@@ -42,6 +43,7 @@ public class Slot {
         this.hasBag = hasBag;
         this.ticketNo = ticketNo;
     }
+
     public Slot(Integer lockerId, Boolean hasBag, String ticketNo) {
         this.lockerId = lockerId;
         this.hasBag = hasBag;
@@ -62,6 +64,7 @@ public class Slot {
     private void setTicketNo(String ticketNo) {
         this.ticketNo = ticketNo;
     }
+
     public String getTicketNo() {
         return ticketNo;
     }
@@ -88,5 +91,10 @@ public class Slot {
 
     public void updateOccupiedStatus() {
         this.hasBag = Boolean.FALSE;
+    }
+
+    public Integer releaseSlotResource() {
+        setTicketNo(null);
+        return getId();
     }
 }

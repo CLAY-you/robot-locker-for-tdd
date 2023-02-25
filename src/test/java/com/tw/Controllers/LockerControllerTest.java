@@ -103,10 +103,10 @@ public class LockerControllerTest extends BaseControllerTest {
         when(lockerService.getSlotInfoByTicketNoDispatched(ticketNo)).thenReturn(slotInfo);
         this.mockMvc.perform(get("/slot/12345678")).andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.ticketNo").value(ticketNo))
-                .andExpect(jsonPath("$.hasBag").value("false"))
-                .andExpect(jsonPath("$.id").value("123"))
-                .andExpect(jsonPath("$.lockerId").value("1"));
+                .andExpect(jsonPath("$.slot.ticketNo").value(ticketNo))
+                .andExpect(jsonPath("$.slot.hasBag").value("false"))
+                .andExpect(jsonPath("$.slot.id").value("123"))
+                .andExpect(jsonPath("$.slot.lockerId").value("1"));
     }
 
     //TODO: 通过locker已经存入一个包，第一次成功取包后，重复使用ticket no 取包

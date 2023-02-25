@@ -5,6 +5,7 @@ import com.tw.Entities.Slot;
 import com.tw.LockerStatus;
 import com.tw.Repositories.LockerRepository;
 import com.tw.Repositories.SlotRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -138,19 +139,19 @@ public class LockerServiceTest {
     void should_return_occupied_slot_info_which_has_saved_packages_when_received_dispatched_ticket_number() {
         String ticketNo = "12345678";
         Optional<Slot> slotOptional = Optional.of(new Slot(123, 1, true, ticketNo));
-        Slot occupiedSlot = new Slot(123, 1, false, ticketNo);
+        Slot occupiedSlot = new Slot(123, 1, false, null);
         Integer lockerId = locker.getId();
 
         when(slotRepository.findByHasBagAndTicketNoAndLockerId(eq(Boolean.TRUE), eq(ticketNo), eq(lockerId))).thenReturn(slotOptional);
         Slot slot = slotOptional.get();
         slot.updateOccupiedStatus();
+        slot.releaseSlotResource();
 
         Slot actualResult = lockerService.getSlotInfoByTicketNoDispatched(ticketNo);
         assertThat(actualResult).usingRecursiveComparison().isEqualTo(occupiedSlot);
     }
 
     //TODO: 使用已经使用过的ticket number 取包时，搜索不到对应包的信息，返回不包含任何信息的Slot
-
 
     @Test
     void should_return_empty_slot_when_given_used_ticket_number() {
@@ -159,6 +160,7 @@ public class LockerServiceTest {
         when(slotRepository.findByHasBagAndTicketNoAndLockerId(eq(Boolean.TRUE), eq(ticketNo), eq(lockerId))).thenReturn(Optional.empty());
 
         Slot actualResult = lockerService.getSlotInfoByTicketNoDispatched(ticketNo);
-        assertThat(actualResult).usingRecursiveComparison().isEqualTo(new Slot());
+
+        Assertions.assertNull(actualResult);
     }
 }
