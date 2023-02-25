@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -115,5 +116,16 @@ public class LockerControllerTest extends BaseControllerTest {
         this.mockMvc.perform(get("/slot/12345678")).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(warningMessage));
+    }
+
+    @Test
+    void should_catch_internal_error_during_the_process_of_finding_slot_in_use_and_release_resource() throws Exception {
+        String warningMessage = "Internal Server Error";
+        doThrow(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, warningMessage))
+                .when(lockerService).getSlotInfoByTicketNoDispatched(anyString());
+        this.mockMvc.perform(get("/slot/12345")).andDo(print())
+                .andExpect(status().isInternalServerError())
+                .andExpect(status().reason(warningMessage))
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException));
     }
 }

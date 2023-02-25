@@ -1,6 +1,5 @@
 package com.tw.Controllers;
 
-import com.tw.Entities.Slot;
 import com.tw.LockerStatus;
 import com.tw.Services.LockerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +36,10 @@ public class LockerController {
 
     @GetMapping("/slot/{ticketNo}")
     public String getSlotInfo(@PathVariable String ticketNo) {
-        return lockerService.getSlotInfoByTicketNoDispatched(ticketNo);
+        try {
+            return lockerService.getSlotInfoByTicketNoDispatched(ticketNo);
+        } catch (Exception e) {
+            throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "Internal Server Error");
+        }
     }
 }
