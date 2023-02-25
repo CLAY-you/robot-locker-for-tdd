@@ -33,7 +33,8 @@ public class LockerService {
         List<Slot> availableSlots = slotRepository.findByHasBagAndLockerId(false, locker.getId());
         if (availableSlots.isEmpty()) return "no available slot can be dispatched, try it later";
         Slot availableSlot = availableSlots.get(0);
-        return availableSlot.dispatchTicketNumber();
+        availableSlot.dispatchTicketNumber();
+        return slotRepository.save(availableSlot).getTicketNo();
     }
 
     public String getSlotInfoByTicketNoDispatched(String ticketNo) {

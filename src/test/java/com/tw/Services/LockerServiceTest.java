@@ -5,7 +5,6 @@ import com.tw.Entities.Slot;
 import com.tw.LockerStatus;
 import com.tw.Repositories.LockerRepository;
 import com.tw.Repositories.SlotRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -45,6 +44,9 @@ public class LockerServiceTest {
 
     @Captor
     private ArgumentCaptor<Boolean> booleanArgumentCaptor;
+
+    @Captor
+    private ArgumentCaptor<Slot> slotArgumentCaptor;
 
     List<Locker> lockers = new ArrayList<>(List.of(new Locker(1, 2)));
     Locker locker = lockers.get(0);
@@ -91,7 +93,8 @@ public class LockerServiceTest {
     //TODO: locker 中存在可使用的slot的时候，匹配到可使用的slot，返回8位随机数字返回 作为ticket number
     @Test
     void should_find_available_slot_and_return_8_bit_random_number_as_ticket_number() {
-        List<Slot> availableSlots = new ArrayList<>(List.of(new Slot(1, 1, false)));
+        List<Slot> availableSlots = new ArrayList<>(List.of(new Slot(null, 1, false)));
+        Slot savedSlot = new Slot(1, 1, true, "12345678");
         List<Slot> spyAvailableSlots = spy(availableSlots);
         when(slotRepository.findByHasBagAndLockerId(any(Boolean.class), any(Integer.class))).thenReturn(spyAvailableSlots);
 
@@ -99,12 +102,16 @@ public class LockerServiceTest {
         when(spyAvailableSlots.get(0)).thenReturn(spyAvailableSlot);
         when(spyAvailableSlot.dispatchTicketNumber()).thenReturn("12345678");
 
+        when(slotRepository.save(any(Slot.class))).thenReturn(savedSlot);
+
         String ticketNo = lockerService.getTicketNoBindWithDispatchedSlot();
 
         verify(slotRepository, times(1))
                 .findByHasBagAndLockerId(booleanArgumentCaptor.capture(), integerArgumentCaptor.capture());
+
         Boolean hasBag = booleanArgumentCaptor.getValue();
         Integer lockerId = integerArgumentCaptor.getValue();
+
         assertThat(ticketNo).isEqualTo("12345678");
         assertThat(hasBag).isEqualTo(spyAvailableSlot.getHasBag());
         assertThat(lockerId).isEqualTo(locker.getId());
