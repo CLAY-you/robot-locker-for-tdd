@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -108,5 +107,16 @@ public class LockerControllerTest extends BaseControllerTest {
                 .andExpect(jsonPath("$.hasBag").value("false"))
                 .andExpect(jsonPath("$.id").value("123"))
                 .andExpect(jsonPath("$.lockerId").value("1"));
+    }
+
+    //TODO: 通过locker已经存入一个包，第一次成功取包后，重复使用ticket no 取包
+    @Test
+    void should_return_warning_message_ticket_number_is_invalid_getting_package_failed() throws Exception {
+        String ticketNo = "12345678";
+        String warningMessage = "ticket number is invalid";
+        when(lockerService.getSlotInfoByTicketNoDispatched(ticketNo)).thenReturn(null);
+        this.mockMvc.perform(get("/slot/12345678")).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.warningMessage").value(warningMessage));
     }
 }

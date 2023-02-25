@@ -8,7 +8,10 @@ import com.tw.Repositories.SlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.Provider;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -43,6 +46,6 @@ public class LockerService {
             slotOptional.get().updateOccupiedStatus();
             return slotOptional.get();
         }
-        return null;
+        return new Slot();
     }
 }

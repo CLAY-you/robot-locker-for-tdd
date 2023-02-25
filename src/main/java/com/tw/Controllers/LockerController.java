@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.websocket.server.PathParam;
-
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RestController
@@ -38,7 +36,10 @@ public class LockerController {
     }
 
     @GetMapping("/slot/{ticketNo}")
-    public Slot getSlotInfo(@PathVariable String ticketNo) {
-        return lockerService.getSlotInfoByTicketNoDispatched(ticketNo);
+    public PickFromSlotResponse getSlotInfo(@PathVariable String ticketNo) {
+        String warningMessage = "";
+        Slot slot = lockerService.getSlotInfoByTicketNoDispatched(ticketNo);
+        if (null == slot) warningMessage = "ticket number is invalid";
+        return new PickFromSlotResponse(slot, warningMessage);
     }
 }

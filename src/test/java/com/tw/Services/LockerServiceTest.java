@@ -148,4 +148,17 @@ public class LockerServiceTest {
         Slot actualResult = lockerService.getSlotInfoByTicketNoDispatched(ticketNo);
         assertThat(actualResult).usingRecursiveComparison().isEqualTo(occupiedSlot);
     }
+
+    //TODO: 使用已经使用过的ticket number 取包时，搜索不到对应包的信息，返回不包含任何信息的Slot
+
+
+    @Test
+    void should_return_empty_slot_when_given_used_ticket_number() {
+        String ticketNo = "12345678";
+        Integer lockerId = locker.getId();
+        when(slotRepository.findByHasBagAndTicketNoAndLockerId(eq(Boolean.TRUE), eq(ticketNo), eq(lockerId))).thenReturn(Optional.empty());
+
+        Slot actualResult = lockerService.getSlotInfoByTicketNoDispatched(ticketNo);
+        assertThat(actualResult).usingRecursiveComparison().isEqualTo(new Slot());
+    }
 }
