@@ -6,19 +6,25 @@ import com.tw.LockerStatus;
 import com.tw.Repositories.LockerRepository;
 import com.tw.Repositories.SlotRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -121,7 +127,25 @@ public class LockerServiceTest {
     //TODO: locker中存在可使用的slot的时候，遇到internal error，返回对应的提示信息
 
     @Test
+    @Disabled
     void should_return_internal_error_message_when_it_occurred_given_there_is_available_slots() {
 
+    }
+
+    //TODO: should_return_slot_info_which_has_saved_packages_when_received_dispatched_ticket_number
+
+    @Test
+    void should_return_occupied_slot_info_which_has_saved_packages_when_received_dispatched_ticket_number() {
+        String ticketNo = "12345678";
+        Optional<Slot> slotOptional = Optional.of(new Slot(123, 1, true, ticketNo));
+        Slot occupiedSlot = new Slot(123, 1, false, ticketNo);
+        Integer lockerId = locker.getId();
+
+        when(slotRepository.findByHasBagAndTicketNoAndLockerId(eq(Boolean.TRUE), eq(ticketNo), eq(lockerId))).thenReturn(slotOptional);
+        Slot slot = slotOptional.get();
+        slot.updateOccupiedStatus();
+
+        Slot actualResult = lockerService.getSlotInfoByTicketNoDispatched(ticketNo);
+        assertThat(actualResult).usingRecursiveComparison().isEqualTo(occupiedSlot);
     }
 }

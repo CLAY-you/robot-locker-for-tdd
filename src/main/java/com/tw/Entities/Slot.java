@@ -81,4 +81,8 @@ public class Slot {
     public Integer getLockerId() {
         return lockerId;
     }
+
+    public void updateOccupiedStatus() {
+        this.hasBag = Boolean.FALSE;
+    }
 }

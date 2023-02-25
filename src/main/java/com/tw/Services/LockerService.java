@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LockerService {
@@ -36,6 +37,12 @@ public class LockerService {
     }
 
     public Slot getSlotInfoByTicketNoDispatched(String ticketNo) {
+        Locker locker = lockerRepository.findAll().get(0);
+        Optional<Slot> slotOptional = slotRepository.findByHasBagAndTicketNoAndLockerId(Boolean.TRUE, ticketNo, locker.getId());
+        if (slotOptional.isPresent()) {
+            slotOptional.get().updateOccupiedStatus();
+            return slotOptional.get();
+        }
         return null;
     }
 }
