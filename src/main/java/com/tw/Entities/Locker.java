@@ -23,7 +23,7 @@ public class Locker {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "capacity")

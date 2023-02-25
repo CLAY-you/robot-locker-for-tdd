@@ -1,10 +1,10 @@
 package com.tw.Repositories;
 
 import com.tw.Entities.Slot;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 import java.util.Optional;
-
-import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SlotRepository extends JpaRepository<Slot, Integer> {
     long countByHasBagFalseAndLockerId(Integer lockerId);

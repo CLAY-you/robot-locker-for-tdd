@@ -1,6 +1,5 @@
 package com.tw.Controllers;
 
-import com.tw.Entities.Slot;
 import com.tw.LockerStatus;
 import com.tw.Services.LockerService;
 import org.junit.jupiter.api.Test;
