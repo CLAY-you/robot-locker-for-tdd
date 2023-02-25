@@ -30,10 +30,8 @@ public class LockerService {
     public String getTicketNoBindWithDispatchedSlot() {
         Locker locker = lockerRepository.findAll().get(0);
         List<Slot> availableSlots = slotRepository.findByHasBagAndLockerId(false, locker.getId());
-        if (!availableSlots.isEmpty()) {
-            Slot availableSlot = availableSlots.get(0);
-            return availableSlot.dispatchTicketNumber();
-        }
-        return "no available slot can be dispatched, try it later";
+        if (availableSlots.isEmpty()) return "no available slot can be dispatched, try it later";
+        Slot availableSlot = availableSlots.get(0);
+        return availableSlot.dispatchTicketNumber();
     }
 }
