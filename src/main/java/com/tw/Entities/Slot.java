@@ -65,4 +65,20 @@ public class Slot {
     public boolean getHasBag() {
         return hasBag;
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setLockerId(Integer lockerId) {
+        this.lockerId = lockerId;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Integer getLockerId() {
+        return lockerId;
+    }
 }
