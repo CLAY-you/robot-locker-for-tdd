@@ -9,6 +9,19 @@ import javax.persistence.JoinColumn;
 
 @Entity
 public class Slot {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id;
+
+    @JoinColumn(name = "locker_id")
+    private Integer lockerId;
+
+    @Column(name = "has_bag")
+    private Boolean hasBag;
+
+    @Column(name = "ticket_no")
+    private String ticketNo;
     public Slot() {
     }
 
@@ -29,20 +42,11 @@ public class Slot {
         this.hasBag = hasBag;
         this.ticketNo = ticketNo;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
-
-    @JoinColumn(name = "locker_id")
-    private Integer lockerId;
-
-    @Column(name = "has_bag")
-    private Boolean hasBag;
-
-    @Column(name = "ticket_no")
-    private String ticketNo;
+    public Slot(Integer lockerId, Boolean hasBag, String ticketNo) {
+        this.lockerId = lockerId;
+        this.hasBag = hasBag;
+        this.ticketNo = ticketNo;
+    }
 
     public String dispatchTicketNumber() {
         String generateTicketNo = generateTicketNumber();

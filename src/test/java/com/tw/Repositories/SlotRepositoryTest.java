@@ -92,4 +92,13 @@ public class SlotRepositoryTest {
 
         assertThat(availableSlots.size()).isEqualTo(1);
     }
+
+    @Test
+    void should_return_occupied_slot_when_slot_in_locker_have_been_used() {
+        Slot slot = new Slot(firstLocker.getId(), Boolean.TRUE, "12345678");
+        Slot expectedResult = slotRepository.save(slot);
+
+        Slot occupiedSlot = slotRepository.findByHasBagAndTicketNoAndLockerId(Boolean.TRUE, "12345678", firstLocker.getId()).get();
+        assertThat(occupiedSlot).usingRecursiveComparison().ignoringFields("id").isEqualTo(expectedResult);
+    }
 }
