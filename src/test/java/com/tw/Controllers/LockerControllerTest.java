@@ -1,5 +1,6 @@
 package com.tw.Controllers;
 
+import com.tw.Entities.Slot;
 import com.tw.LockerStatus;
 import com.tw.Services.LockerService;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -92,5 +94,19 @@ public class LockerControllerTest extends BaseControllerTest {
                 .andExpect(status().isInternalServerError())
                 .andExpect(status().reason(warningMessage))
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException));
+    }
+
+    //TODO: 通过locker已经存入一个包，通过拿到的 ticket no 取出存入的包裹
+    @Test
+    void should_return_saved_slot_info_when_received_dispatched_ticket_no_before() throws Exception {
+        String ticketNo = "12345678";
+        Slot slotInfo = new Slot(123, 1, false, "12345678");
+        when(lockerService.getSlotInfoByTicketNoDispatched(ticketNo)).thenReturn(slotInfo);
+        this.mockMvc.perform(get("/slot/12345678")).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.ticketNo").value(ticketNo))
+                .andExpect(jsonPath("$.hasBag").value("false"))
+                .andExpect(jsonPath("$.id").value("123"))
+                .andExpect(jsonPath("$.lockerId").value("1"));
     }
 }

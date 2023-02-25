@@ -34,4 +34,8 @@ public class LockerService {
         Slot availableSlot = availableSlots.get(0);
         return availableSlot.dispatchTicketNumber();
     }
+
+    public Slot getSlotInfoByTicketNoDispatched(String ticketNo) {
+        return null;
+    }
 }
