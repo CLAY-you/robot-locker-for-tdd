@@ -46,9 +46,6 @@ public class LockerServiceTest {
     @Captor
     private ArgumentCaptor<Boolean> booleanArgumentCaptor;
 
-    @Captor
-    private ArgumentCaptor<Slot> slotArgumentCaptor;
-
     List<Locker> lockers = new ArrayList<>(List.of(new Locker(1, 2)));
     Locker locker = lockers.get(0);
 
