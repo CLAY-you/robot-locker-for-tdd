@@ -36,10 +36,7 @@ public class LockerController {
     }
 
     @GetMapping("/slot/{ticketNo}")
-    public PickFromSlotResponse getSlotInfo(@PathVariable String ticketNo) {
-        String warningMessage = "";
-        Slot slot = lockerService.getSlotInfoByTicketNoDispatched(ticketNo);
-        if (null == slot) warningMessage = "ticket number is invalid";
-        return new PickFromSlotResponse(slot, warningMessage);
+    public String getSlotInfo(@PathVariable String ticketNo) {
+        return lockerService.getSlotInfoByTicketNoDispatched(ticketNo);
     }
 }

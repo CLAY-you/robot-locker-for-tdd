@@ -36,14 +36,14 @@ public class LockerService {
         return availableSlot.dispatchTicketNumber();
     }
 
-    public Slot getSlotInfoByTicketNoDispatched(String ticketNo) {
+    public String getSlotInfoByTicketNoDispatched(String ticketNo) {
+        String warningMessage = "ticket number is not valid";
         Locker locker = lockerRepository.findAll().get(0);
         Optional<Slot> slotOptional = slotRepository.findByHasBagAndTicketNoAndLockerId(Boolean.TRUE, ticketNo, locker.getId());
         if (slotOptional.isPresent()) {
             Slot slot = slotOptional.get();
-            slot.releaseSlotResource();
-            return slot;
+            return slot.releaseSlotResource().toString();
         }
-        return null;
+        return warningMessage;
     }
 }

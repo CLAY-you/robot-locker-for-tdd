@@ -95,28 +95,25 @@ public class LockerControllerTest extends BaseControllerTest {
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException));
     }
 
-    //TODO: 通过locker已经存入一个包，通过拿到的 ticket no 取出存入的包裹
+    //TODO: 通过locker已经存入一个包，通过拿到的 ticket no 取出存入的包裹，返回slot id
     @Test
     void should_return_saved_slot_info_when_received_dispatched_ticket_no_before() throws Exception {
         String ticketNo = "12345678";
-        Slot slotInfo = new Slot(123, 1, false, "12345678");
-        when(lockerService.getSlotInfoByTicketNoDispatched(ticketNo)).thenReturn(slotInfo);
+        String slotId = "123";
+        when(lockerService.getSlotInfoByTicketNoDispatched(ticketNo)).thenReturn(slotId);
         this.mockMvc.perform(get("/slot/12345678")).andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.slot.ticketNo").value(ticketNo))
-                .andExpect(jsonPath("$.slot.hasBag").value("false"))
-                .andExpect(jsonPath("$.slot.id").value("123"))
-                .andExpect(jsonPath("$.slot.lockerId").value("1"));
+                .andExpect(jsonPath("$").value("123"));
     }
 
-    //TODO: 通过locker已经存入一个包，第一次成功取包后，重复使用ticket no 取包
+    //TODO: 通过locker已经存入一个包，第一次成功取包后，重复使用ticket no 取包，返回 warning message
     @Test
     void should_return_warning_message_ticket_number_is_invalid_getting_package_failed() throws Exception {
         String ticketNo = "12345678";
         String warningMessage = "ticket number is invalid";
-        when(lockerService.getSlotInfoByTicketNoDispatched(ticketNo)).thenReturn(null);
+        when(lockerService.getSlotInfoByTicketNoDispatched(ticketNo)).thenReturn(warningMessage);
         this.mockMvc.perform(get("/slot/12345678")).andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.warningMessage").value(warningMessage));
+                .andExpect(jsonPath("$").value(warningMessage));
     }
 }
