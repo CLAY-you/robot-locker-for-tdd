@@ -40,10 +40,6 @@ public class LockerService {
         String warningMessage = "ticket number is not valid";
         Locker locker = lockerRepository.findAll().get(0);
         Optional<Slot> slotOptional = slotRepository.findByHasBagAndTicketNoAndLockerId(Boolean.TRUE, ticketNo, locker.getId());
-        if (slotOptional.isPresent()) {
-            Slot slot = slotOptional.get();
-            return slot.releaseSlotResource().toString();
-        }
-        return warningMessage;
+        return slotOptional.map(slot -> slot.releaseSlotResource().toString()).orElse(warningMessage);
     }
 }
